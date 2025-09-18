@@ -109,6 +109,31 @@
                 </div>
             </div>
 
+            <!-- Payment Details Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Payment Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Payment Method:</strong>
+                        @if($order->payment_method)
+                            {{ strtoupper($order->payment_method) }}
+                        @else
+                            <span class="text-muted">Not Provided</span>
+                        @endif
+                    </p>
+
+                    <p><strong>Transaction ID:</strong>
+                        @if($order->transaction_id)
+                            {{ $order->transaction_id }}
+                        @else
+                            <span class="text-muted">Not Provided</span>
+                        @endif
+                    </p>
+                </div>
+            </div>
+
+
             <div class="card mb-4">
                 <div class="card-header">
                     <h5>Customer Details</h5>

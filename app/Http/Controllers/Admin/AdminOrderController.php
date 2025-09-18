@@ -206,10 +206,11 @@ class AdminOrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['items.product', 'coupon']);
-        $couriers = CourierService::where('is_active', true)->get();
+         $order->load(['items.product', 'items.variantOption', 'coupon', 'deliveryOption']);
+        $couriers = CourierService::all();
+        $deliveryOptions = DeliveryOption::where('is_active', true)->get();
 
-        return view('admin.pages.orders.show', compact('order', 'couriers'));
+        return view('admin.pages.orders.show', compact('order', 'couriers', 'deliveryOptions'));
     }
 
     public function customerList(Request $request)

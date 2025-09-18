@@ -66,6 +66,7 @@ class OrderController extends Controller
             // 'items.*.color_name' => 'nullable|string',
             'coupon_code' => 'nullable|string|exists:coupons,code',
             // 'comment' => 'nullable|string',
+            'payment_method' => 'required|in:bkash,nagad,cod',
         ]);
 
         if ($validator->fails()) {
@@ -189,7 +190,6 @@ class OrderController extends Controller
                     'quantity' => (int) $itemData['quantity'],
                     'total_price' => $itemTotal,
 
-                    // Variant related fields not needed
                     'size_name' => null,
                     'color_name' => null,
                     'size_id' => null,
@@ -267,6 +267,8 @@ if ($request->coupon_code) {
                 'discount' => (float) $discount,
                 'total' => (float) $total,
                 'coupon_code' => $couponCode,
+                'payment_method' => $request->payment_method,
+                'transaction_id' => $request->transaction_id,
                 'status' => 'pending',
                 // 'comment' => $request->comment,
                 // 'delivery_option_id' => $request->delivery_option_id,
@@ -327,7 +329,9 @@ if ($request->coupon_code) {
                         'delivery_charge' => (float) $order->delivery_charge,
                         'total' => (float) $order->total,
                         'coupon_applied' => $order->coupon_code,
-                        'coupon_details' => $couponDetails
+                        'coupon_details' => $couponDetails,
+                        'payment_method' => $order->payment_method,
+                        'transaction_id' => $order->transaction_id,
                     ],
                     'items' => array_map(fn($item) => [
                         'product_id' => $item['product_id'],
@@ -341,6 +345,7 @@ if ($request->coupon_code) {
                         'unit_price' => $item['price'],
                         'total_price' => $item['price'] * $item['quantity']
                     ],
+
                     $items),
                     'created_at' => $order->created_at->toIso8601String()
                 ],

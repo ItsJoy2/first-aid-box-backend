@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\DeliveryOption;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +27,8 @@ class Order extends Model
         'comment',
         'ip_address',
         'delivery_option_id',
+        'payment_method',
+        'transaction_id',
         'courier_response',
         'tracking_code',
         'consignment_id',

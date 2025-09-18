@@ -21,11 +21,13 @@ return new class extends Migration
             $table->string('thana')->nullable();
             $table->decimal('subtotal', 10, 2);
             $table->decimal('delivery_charge', 10, 2);
+            $table->string('payment_method')->default('cod');
+            $table->string('transaction_id')->nullable();
             $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('admin_discount', 10, 2)->default(0);
             $table->decimal('total', 10, 2);
             $table->string('coupon_code')->nullable();
-            $table->unsignedBigInteger('delivery_option_id')->nullable(); // <-- removed ->after()
+            $table->unsignedBigInteger('delivery_option_id')->nullable();
             $table->foreign('delivery_option_id')->references('id')->on('delivery_options')->onDelete('set null');
             $table->foreignId('courier_service_id')->nullable()->constrained('courier_services')->nullOnDelete();
             $table->string('tracking_code')->nullable();
