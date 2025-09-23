@@ -14,6 +14,7 @@ use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\PaymentMethodController;
 use App\Http\Controllers\API\ProductSearchController;
 use App\Http\Controllers\API\DeliveryOptionController;
 use App\Http\Controllers\API\GeneralSettingsController;
@@ -97,5 +98,9 @@ Route::get('/sizes', [SizeController::class, 'index']);
 Route::get('banners/home', [BannerController::class, 'homeBanners']);
 Route::get('banners/offer', [BannerController::class, 'offerBanners']);
 Route::get('banners/campaign', [BannerController::class, 'campaignBanners']);
+
+//Payment Method
+Route::get('payment-methods', [PaymentMethodController::class, 'index']);
+Route::get('payment-methods/{id}', [PaymentMethodController::class, 'show']);
 
 });
