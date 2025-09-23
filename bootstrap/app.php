@@ -21,11 +21,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json(['message' => 'Unauthenticated'], 401);
             }
 
-            // You can also customize based on route prefix if needed:
-            // if ($request->is('admin/*')) {
-            //     return redirect()->guest('/signin');
-            // }
-
-            return redirect()->guest('/signin');
+            return redirect()->guest(route('admin.login') .'/');
         });
     })->create();

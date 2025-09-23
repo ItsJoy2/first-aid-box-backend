@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\PaymentMethod;
 use App\Models\DeliveryOption;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -15,11 +16,13 @@ class Order extends Model
         'order_number',
         'name',
         'phone',
+        'email',
         'address',
         'district',
         'thana',
         'subtotal',
         'delivery_charge',
+        'advance_paid_amount',
         'discount',
         'total',
         'coupon_code',
@@ -27,7 +30,7 @@ class Order extends Model
         'comment',
         'ip_address',
         'delivery_option_id',
-        'payment_method',
+        'payment_method_id',
         'transaction_id',
         'courier_response',
         'tracking_code',
@@ -57,51 +60,58 @@ class Order extends Model
         return $this->belongsTo(Coupon::class, 'coupon_code', 'code');
     }
     public function returnStock()
-{
-    foreach ($this->items as $item) {
-        $product = $item->product;
+    {
+        foreach ($this->items as $item) {
+            $product = $item->product;
 
-        if ($product->has_variants && $item->variant_option_id) {
-            $variantOption = ProductVariantOption::find($item->variant_option_id);
-            if ($variantOption) {
-                $variantOption->increment('stock', $item->quantity);
-                $product->updateStock();
+            if ($product->has_variants && $item->variant_option_id) {
+                $variantOption = ProductVariantOption::find($item->variant_option_id);
+                if ($variantOption) {
+                    $variantOption->increment('stock', $item->quantity);
+                    $product->updateStock();
+                }
+            } else {
+                $product->increment('total_stock', $item->quantity);
             }
-        } else {
-            $product->increment('total_stock', $item->quantity);
         }
     }
-}
 
-public function deliveryOption()
-{
-    return $this->belongsTo(DeliveryOption::class, 'delivery_option_id');
-}
+    public function deliveryOption()
+    {
+        return $this->belongsTo(DeliveryOption::class, 'delivery_option_id');
+    }
 
-public function courier()
-{
-    return $this->belongsTo(CourierService::class, 'courier_service_id');
-}
+    public function courier()
+    {
+        return $this->belongsTo(CourierService::class, 'courier_service_id');
+    }
 
-public function getCourierStatusAttribute()
-{
-    if (!$this->courier_response) return null;
+    public function getCourierStatusAttribute()
+    {
+        if (!$this->courier_response) return null;
 
-    $response = json_decode($this->courier_response, true);
+        $response = json_decode($this->courier_response, true);
 
-    return $response['status'] ?? null;
-}
+        return $response['status'] ?? null;
+    }
 
 
-protected $appends = ['pdf_url', 'delivery_status'];
+    protected $appends = ['pdf_url', 'delivery_status'];
 
-public function getPdfUrlAttribute()
-{
-    return $this->pdf_path ? Storage::url($this->pdf_path) : null;
-}
+    public function getPdfUrlAttribute()
+    {
+        return $this->pdf_path ? Storage::url($this->pdf_path) : null;
+    }
 
-public function getDeliveryStatusAttribute()
-{
-    return getDeliveryStatus($this);
-}
+    public function getDeliveryStatusAttribute()
+    {
+        return getDeliveryStatus($this);
+    }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
+    }
+
+
 }

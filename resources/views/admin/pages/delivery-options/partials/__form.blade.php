@@ -18,7 +18,7 @@
     @enderror
 </div>
 
-<div class="form-group">
+<div class="form-group" hidden>
     <div class="form-check">
         <input type="checkbox" class="form-check-input" id="is_free_for_products"
                name="is_free_for_products" value="1"

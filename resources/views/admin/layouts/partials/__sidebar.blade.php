@@ -326,6 +326,27 @@
 								</ul>
 							</div>
 						</li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#payment-method">
+                                <i class="fas fa-credit-card"></i>
+                                <p>Payment Method</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="payment-method">
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a href="{{ route('admin.payment-methods.index') }}">
+                                            <span class="sub-item">All Methods</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.payment-methods.create') }}">
+                                            <span class="sub-item">Add Payment Method</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
                         <li class="nav-item">
 							<a data-bs-toggle="collapse" href="#couriers">

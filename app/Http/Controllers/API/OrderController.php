@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\OrderItem;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\PaymentMethod;
 use App\Models\DeliveryOption;
 use App\Models\ProductVariant;
 use App\Models\BlockedCustomer;
@@ -59,6 +60,7 @@ class OrderController extends Controller
             'thana' => 'required|string',
             'district' => 'required|string',
             'delivery_option_id' => 'required|exists:delivery_options,id',
+            'payment_method_id' => 'required|exists:payment_methods,id',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
@@ -66,7 +68,6 @@ class OrderController extends Controller
             // 'items.*.color_name' => 'nullable|string',
             'coupon_code' => 'nullable|string|exists:coupons,code',
             // 'comment' => 'nullable|string',
-            'payment_method' => 'required|in:bkash,nagad,cod',
         ]);
 
         if ($validator->fails()) {
@@ -76,11 +77,21 @@ class OrderController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+        if ($request->transaction_id) {
+            $exists = Order::where('transaction_id', $request->transaction_id)->exists();
+            if ($exists) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The transaction ID has already been used. Please check your transaction and try again.'
+                ], 422);
+            }
+        }
 
         try {
             DB::beginTransaction();
 
             $deliveryOption = DeliveryOption::findOrFail($request->delivery_option_id);
+            $paymentMethod = PaymentMethod::findOrFail($request->payment_method_id);
             $subtotal = 0;
             $items = [];
             $inventoryUpdates = [
@@ -251,8 +262,9 @@ if ($request->coupon_code) {
         'applicable_products' => $coupon->apply_to_all ? null : $coupon->products->pluck('id')
     ];
 }
+            $advanceAmount = 200;
+            $total = $subtotal + $deliveryOption->charge - $discount - $advanceAmount;
 
-            $total = $subtotal + $deliveryOption->charge - $discount;
             $orderNumber = "FIB-" . str_pad(mt_rand(1, 99999), 6, '0', STR_PAD_LEFT);
 
             $order = Order::create([
@@ -264,10 +276,11 @@ if ($request->coupon_code) {
                 'district' => $request->district,
                 'subtotal' => (float) $subtotal,
                 'delivery_charge' => (float) $deliveryOption->charge,
+                'advance_paid_amount' => (float) $advanceAmount,
                 'discount' => (float) $discount,
                 'total' => (float) $total,
                 'coupon_code' => $couponCode,
-                'payment_method' => $request->payment_method,
+                'payment_method_id' => $paymentMethod->id,
                 'transaction_id' => $request->transaction_id,
                 'status' => 'pending',
                 // 'comment' => $request->comment,
@@ -327,10 +340,11 @@ if ($request->coupon_code) {
                         'subtotal' => (float) $order->subtotal,
                         'discount' => (float) $order->discount,
                         'delivery_charge' => (float) $order->delivery_charge,
+                        'advance_paid' => (float) $order->advance_paid_amount,
                         'total' => (float) $order->total,
                         'coupon_applied' => $order->coupon_code,
                         'coupon_details' => $couponDetails,
-                        'payment_method' => $order->payment_method,
+                        'payment_method' => $order->paymentMethod ? $order->paymentMethod->name : null,
                         'transaction_id' => $order->transaction_id,
                     ],
                     'items' => array_map(fn($item) => [

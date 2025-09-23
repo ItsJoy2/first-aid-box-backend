@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\CourierServiceController;
 use App\Http\Controllers\Admin\GeneralSettingsController;
 use App\Http\Controllers\Admin\HomepageSectionController;
@@ -67,6 +68,18 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
         'update' => 'admin.products.update',
         'destroy' => 'admin.products.destroy'
     ]);
+
+    //Payment Methods
+     Route::resource('payment-methods', PaymentMethodController::class)->names([
+        'index' => 'admin.payment-methods.index',
+        'create' => 'admin.payment-methods.create',
+        'store' => 'admin.payment-methods.store',
+        'show' => 'admin.payment-methods.show',
+        'edit' => 'admin.payment-methods.edit',
+        'update' => 'admin.payment-methods.update',
+        'destroy' => 'admin.payment-methods.destroy'
+    ]);
+
     Route::delete('products/images/{image}', [AdminProductController::class, 'deleteImage'])->name('admin.products.images.destroy');
     Route::get('admin/products/variant', [AdminProductController::class, 'variant'])->name('admin.products.variant');
 

@@ -16,13 +16,16 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->string('name');
             $table->string('phone');
+            $table->string('email')->nullable();
             $table->text('address');
             $table->string('district')->nullable();
             $table->string('thana')->nullable();
             $table->decimal('subtotal', 10, 2);
             $table->decimal('delivery_charge', 10, 2);
-            $table->string('payment_method')->default('cod');
-            $table->string('transaction_id')->nullable();
+            $table->decimal('advance_paid_amount', 10, 2)->default(0);
+            $table->unsignedBigInteger('payment_method_id');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('restrict');
+            $table->string('transaction_id')->unique()->nullable();
             $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('admin_discount', 10, 2)->default(0);
             $table->decimal('total', 10, 2);
@@ -35,7 +38,7 @@ return new class extends Migration
             $table->json('courier_response')->nullable();
             $table->string('ip_address')->nullable();
             $table->string('custom_link')->nullable();
-            $table->enum('status', ['incomplete', 'pending', 'hold', 'processing', 'shipped', 'courier_delivered', 'delivered', 'cancelled'])->default('pending');
+            $table->enum('status', ['incomplete', 'pending', 'hold', 'processing','shipped', 'courier_delivered', 'delivered', 'cancelled', 'in_review', 'unknown'])->default('pending');
             $table->text('comment')->nullable();
             $table->string('admin_comment')->nullable();
             $table->timestamps();
