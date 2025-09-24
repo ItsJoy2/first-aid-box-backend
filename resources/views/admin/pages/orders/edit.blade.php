@@ -104,6 +104,10 @@
                     <div class="mb-3">
                         <strong>Subtotal:</strong> &#2547;{{ number_format($order->subtotal, 2) }}
                     </div>
+                    <div class="mb-3">
+                        <strong>Advance Pay:</strong>
+                        &#2547;{{ $order->advance_paid_amount ?? '00' }}
+                    </div>
 
                     @if($order->discount > 0)
                     <div class="mb-3">
@@ -113,7 +117,6 @@
                         @endif
                     </div>
                     @endif
-
                     <div class="mb-3">
                         <strong>Delivery Method:</strong>
                         {{ optional($order->deliveryOption)->name ?? 'Not Set' }}

@@ -284,8 +284,8 @@ if ($request->coupon_code) {
                 'payment_method_id' => $paymentMethod->id,
                 'transaction_id' => $request->transaction_id,
                 'status' => 'pending',
+                'delivery_option_id' => $request->delivery_option_id,
                 // 'comment' => $request->comment,
-                // 'delivery_option_id' => $request->delivery_option_id,
                 // 'variant_option_id' => $request->variant_option_id,
                 'ip_address' => $ipAddress,
             ]);
