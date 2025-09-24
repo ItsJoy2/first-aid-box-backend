@@ -39,6 +39,7 @@ class GeneralSettingsController extends Controller
                     'primary' => $settings->contact_number_1,
                     'secondary' => $settings->contact_number_2,
                 ],
+                'advance_pay_description' => $settings->advance_pay_description,
                 'google_tag_manager' => $settings->google_tag_manager,
                 'domain_verification' => $settings->domain_verification,
                 'header_scripts' => $settings->header_scripts,

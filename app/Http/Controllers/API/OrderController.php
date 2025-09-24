@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
 use App\Models\DeliveryOption;
+use App\Models\GeneralSetting;
 use App\Models\ProductVariant;
 use App\Models\BlockedCustomer;
 use Illuminate\Support\Facades\DB;
@@ -262,7 +263,7 @@ if ($request->coupon_code) {
         'applicable_products' => $coupon->apply_to_all ? null : $coupon->products->pluck('id')
     ];
 }
-            $advanceAmount = 200;
+            $advanceAmount = GeneralSetting::value('advance_amount');
             $total = $subtotal + $deliveryOption->charge - $discount - $advanceAmount;
 
             $orderNumber = "FIB-" . str_pad(mt_rand(1, 99999), 6, '0', STR_PAD_LEFT);

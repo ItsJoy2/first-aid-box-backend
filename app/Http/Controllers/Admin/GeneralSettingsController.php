@@ -41,6 +41,8 @@ class GeneralSettingsController extends Controller
             'header_scripts' => 'nullable|string',
             'footer_scripts' => 'nullable|string',
             'footer_content' => 'nullable|string',
+            'advance_amount'=> 'nullable|numeric|min:0',
+            'advance_pay_description'=> 'nullable|string',
 
         ]);
 
@@ -64,6 +66,9 @@ class GeneralSettingsController extends Controller
             'header_scripts',
             'footer_scripts',
             'footer_content',
+
+            'advance_amount',
+            'advance_pay_description',
         ]);
 
 

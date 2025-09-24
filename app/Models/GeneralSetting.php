@@ -28,5 +28,7 @@ class GeneralSetting extends Model
         'header_scripts',
         'footer_scripts',
         'footer_content',
+        'advance_amount',
+        'advance_pay_description',
     ];
 }

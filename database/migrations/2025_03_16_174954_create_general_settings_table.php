@@ -32,6 +32,8 @@ return new class extends Migration
             $table->string('youtube_url')->nullable();
             $table->string('linkedin_url')->nullable();
             $table->string('tiktok_url')->nullable();
+            $table->string('advance_amount')->nullable();
+            $table->string('advance_pay_description')->nullable();
             $table->timestamps();
         });
 

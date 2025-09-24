@@ -15,7 +15,8 @@
             <!-- Sidebar Navigation -->
             <div class="col-md-4 mb-4 mt-4">
                 <div class="list-group mt-3" id="settingsTab" role="tablist">
-                    <a class="list-group-item list-group-item-action active" id="app-tab" data-bs-toggle="tab" href="#app-settings" role="tab">App Settings</a>
+                    <a class="list-group-item list-group-item-action active" id="app-tab" data-bs-toggle="tab" href="#advance-pay-settings" role="tab">Advance Pay Settings</a>
+                    <a class="list-group-item list-group-item-action" id="app-tab" data-bs-toggle="tab" href="#app-settings" role="tab">App Settings</a>
                     <a class="list-group-item list-group-item-action" id="social-tab" data-bs-toggle="tab" href="#social-links" role="tab">Contact Settings</a>
                     <a class="list-group-item list-group-item-action" id="gtm-tab" data-bs-toggle="tab" href="#gtm" role="tab">Google Tag Manager</a>
                     <a class="list-group-item list-group-item-action" id="domain-tab" data-bs-toggle="tab" href="#domain-verification" role="tab">Domain Verification</a>
@@ -26,8 +27,21 @@
             <!-- Tab Content -->
             <div class="col-md-8">
                 <div class="tab-content" id="settingsTabContent">
+                     <!-- Advance Pay Settings -->
+                    <div class="tab-pane fade show active" id="advance-pay-settings" role="tabpanel">
+                        <h4>Advance Pay Settings</h4>
+                        <div class="mb-3">
+                            <label for="advance_amount">Advance Amount (৳)</label>
+                            <input step="1" type="number" id="advance_amount" name="advance_amount" value="{{ old('total_founder', $generalSettings->advance_amount) }}" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="advance_pay_description">Advance Pay Description</label>
+                            <textarea name="advance_pay_description" class="form-control" rows="4">{{ old('advance_pay_description', $generalSettings->advance_pay_description) }}</textarea>
+                        </div>
+
+                    </div>
                     <!-- App Settings -->
-                    <div class="tab-pane fade show active" id="app-settings" role="tabpanel">
+                    <div class="tab-pane fade show" id="app-settings" role="tabpanel">
                         <h4>App Settings</h4>
                         <div class="mb-3">
                             <label for="app_name">App Name</label>
